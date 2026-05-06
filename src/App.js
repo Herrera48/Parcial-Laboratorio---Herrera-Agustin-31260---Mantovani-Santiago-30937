@@ -1,28 +1,27 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, NavLink, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, NavLink, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import './styles/global.css';
 
 /* ══════════════════════════════════════════════
    DATOS
 ══════════════════════════════════════════════ */
 const servicios = [
-  { id: 1, nombre: 'Auditoría de Seguridad',  precio: '$500/mes', img: 'https://picsum.photos/seed/s1/80/60', desc: 'Análisis completo de vulnerabilidades en tu infraestructura.' },
-  { id: 2, nombre: 'Firewall Empresarial',    precio: '$300/mes', img: 'https://picsum.photos/seed/s2/80/60', desc: 'Protección perimetral avanzada contra amenazas externas.' },
-  { id: 3, nombre: 'Antivirus Corporativo',   precio: '$150/mes', img: 'https://picsum.photos/seed/s3/80/60', desc: 'Protección en tiempo real contra malware y ransomware.' },
-  { id: 4, nombre: 'VPN Segura',              precio: '$200/mes', img: 'https://picsum.photos/seed/s4/80/60', desc: 'Conexión cifrada para trabajo remoto seguro.' },
-  { id: 5, nombre: 'Backup en la Nube',       precio: '$100/mes', img: 'https://picsum.photos/seed/s5/80/60', desc: 'Respaldo automático de datos críticos en la nube.' },
+  { id: 1, nombre: 'Auditoría de Seguridad',  precio: '$850.000/mes', img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=80&h=60&fit=crop&q=80', desc: 'Análisis completo de vulnerabilidades en tu infraestructura.' },
+  { id: 2, nombre: 'Firewall Empresarial',    precio: '$450.000/mes', img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=80&h=60&fit=crop&q=80', desc: 'Protección perimetral avanzada contra amenazas externas.' },
+  { id: 3, nombre: 'Antivirus Corporativo',   precio: '$180.000/mes', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=80&h=60&fit=crop&q=80', desc: 'Protección en tiempo real contra malware y ransomware.' },
+  { id: 4, nombre: 'VPN Segura',              precio: '$320.000/mes', img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=80&h=60&fit=crop&q=80', desc: 'Conexión cifrada para trabajo remoto seguro.' },
+  { id: 5, nombre: 'Backup en la Nube',       precio: '$120.000/mes', img: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=80&h=60&fit=crop&q=80', desc: 'Respaldo automático de datos críticos en la nube.' },
 ];
 
 const SLIDES = [
-  { titulo: 'Protección de Datos',        img: 'https://picsum.photos/seed/cyber1/700/300', desc: 'Protegemos tu información más valiosa' },
-  { titulo: 'Ciberseguridad Empresarial', img: 'https://picsum.photos/seed/cyber2/700/300', desc: 'Soluciones integrales para empresas' },
-  { titulo: 'Ethical Hacking',            img: 'https://picsum.photos/seed/cyber3/700/300', desc: 'Encontramos vulnerabilidades antes que los atacantes' },
+  { titulo: 'Protección de Datos',        img: 'https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=700&h=300&fit=crop&q=80', desc: 'Protegemos tu información más valiosa' },
+  { titulo: 'Ciberseguridad Empresarial', img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=700&h=300&fit=crop&q=80', desc: 'Soluciones integrales para empresas' },
+  { titulo: 'Ethical Hacking',            img: 'https://images.unsplash.com/photo-1603366615917-1fa6dad5c4fa?w=700&h=300&fit=crop&q=80', desc: 'Encontramos vulnerabilidades antes que los atacantes' },
 ];
 
 const TEMAS = [
-  '🔒 Firewall', '🛡️ Antivirus', '🔑 VPN', '🌐 Redes',
-  '💻 Hacking Ético', '📱 Mobile', '☁️ Cloud', '🔐 Criptografía',
-  '🕵️ Forense', '⚠️ Amenazas', '🔍 Auditoría', '📊 SIEM',
+  'Firewall', 'Antivirus', 'VPN', 'Redes',
+  'Cloud', 'Amenazas', 'Auditoría',
 ];
 
 /* ══════════════════════════════════════════════
@@ -59,19 +58,24 @@ const Footer = () => (
 /* ══════════════════════════════════════════════
    LAYOUT
 ══════════════════════════════════════════════ */
-const Layout = ({ children }) => (
-  <>
-    <Header />
-    <div className="main-wrapper">
-      <div className="columna-izquierda">
-        <h3>Temas</h3>
-        {TEMAS.map(t => <p key={t}>{t}</p>)}
+const Layout = ({ children }) => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <Header />
+      <div className="main-wrapper">
+        <div className="columna-izquierda">
+          <h3>Temas</h3>
+          {TEMAS.map(t => (
+            <p key={t} onClick={() => navigate(`/servicios?tema=${encodeURIComponent(t)}`)}>{t}</p>
+          ))}
+        </div>
+        <div className="columna-derecha">{children}</div>
       </div>
-      <div className="columna-derecha">{children}</div>
-    </div>
-    <Footer />
-  </>
-);
+      <Footer />
+    </>
+  );
+};
 
 /* ══════════════════════════════════════════════
    PÁGINA: INICIO
@@ -110,11 +114,11 @@ const Inicio = () => {
         <p>En SecureNet somos especialistas en seguridad informática con más de 10 años de experiencia protegiendo empresas.</p>
         <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
           <div>
-            <img src="https://picsum.photos/seed/sec10/200/150" alt="Seguridad" style={{ borderRadius: '8px', width: '200px' }} />
+            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=200&h=150&fit=crop&q=80" alt="Seguridad" style={{ borderRadius: '8px', width: '200px' }} />
             <p>Monitoreo 24/7</p>
           </div>
           <div>
-            <img src="https://picsum.photos/seed/sec11/200/150" alt="Equipo" style={{ borderRadius: '8px', width: '200px' }} />
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200&h=150&fit=crop&q=80" alt="Equipo" style={{ borderRadius: '8px', width: '200px' }} />
             <p>Equipo certificado</p>
           </div>
         </div>
@@ -129,39 +133,72 @@ const Inicio = () => {
 /* ══════════════════════════════════════════════
    PÁGINA: SERVICIOS
 ══════════════════════════════════════════════ */
-const Servicios = () => (
-  <Layout>
-    <h2>Nuestros Servicios</h2>
-    <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
-      <img src="https://picsum.photos/seed/srv1/200/130" alt="Servicios" style={{ borderRadius: '8px' }} />
-      <img src="https://picsum.photos/seed/srv2/200/130" alt="Seguridad" style={{ borderRadius: '8px' }} />
-    </div>
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-      <thead>
-        <tr style={{ background: '#0a192f', color: 'white' }}>
-          <th style={{ padding: '10px' }}>Imagen</th>
-          <th style={{ padding: '10px' }}>Servicio</th>
-          <th style={{ padding: '10px' }}>Precio</th>
-          <th style={{ padding: '10px' }}>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        {servicios.map(s => (
-          <tr key={s.id} style={{ borderBottom: '1px solid #ddd' }}>
-            <td style={{ padding: '10px' }}><img src={s.img} alt={s.nombre} style={{ borderRadius: '4px' }} /></td>
-            <td style={{ padding: '10px' }}>{s.nombre}</td>
-            <td style={{ padding: '10px', color: '#0a192f', fontWeight: 'bold' }}>{s.precio}</td>
-            <td style={{ padding: '10px' }}>
-              <Link to={`/detalle/${s.id}`} style={{ background: '#64ffda', color: '#0a192f', padding: '6px 12px', borderRadius: '4px', textDecoration: 'none', fontWeight: 'bold' }}>
-                Ver Detalle
-              </Link>
-            </td>
+const TEMA_SERVICIOS = {
+  'Firewall':       [2],
+  'Antivirus':      [3],
+  'VPN':            [4],
+  'Redes':          [1, 2],
+  'Hacking Ético':  [1],
+  'Mobile':         [3, 4],
+  'Cloud':          [5],
+  'Criptografía':   [4],
+  'Forense':        [1],
+  'Amenazas':       [2, 3],
+  'Auditoría':      [1],
+  'SIEM':           [1, 2, 3],
+};
+
+const Servicios = () => {
+  const [searchParams] = useSearchParams();
+  const tema = searchParams.get('tema');
+  const ids = tema ? TEMA_SERVICIOS[tema] : null;
+  const lista = ids ? servicios.filter(s => ids.includes(s.id)) : servicios;
+
+  return (
+    <Layout>
+      <h2>Nuestros Servicios</h2>
+      {tema && (
+        <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ background: '#0a192f', color: '#64ffda', padding: '4px 12px', borderRadius: '20px', fontSize: '14px' }}>
+            Tema: {tema}
+          </span>
+          <Link to="/servicios" style={{ fontSize: '13px', color: '#0a192f' }}>Ver todos</Link>
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=200&h=130&fit=crop&q=80" alt="Servicios" style={{ borderRadius: '8px' }} />
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&h=130&fit=crop&q=80" alt="Seguridad" style={{ borderRadius: '8px' }} />
+      </div>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ background: '#0a192f', color: 'white' }}>
+            <th style={{ padding: '10px' }}>Imagen</th>
+            <th style={{ padding: '10px' }}>Servicio</th>
+            <th style={{ padding: '10px' }}>Precio</th>
+            <th style={{ padding: '10px' }}>Acción</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </Layout>
-);
+        </thead>
+        <tbody>
+          {lista.map(s => (
+            <tr key={s.id} style={{ borderBottom: '1px solid #ddd' }}>
+              <td style={{ padding: '10px' }}><img src={s.img} alt={s.nombre} style={{ borderRadius: '4px' }} /></td>
+              <td style={{ padding: '10px' }}>{s.nombre}</td>
+              <td style={{ padding: '10px', color: '#0a192f', fontWeight: 'bold' }}>{s.precio}</td>
+              <td style={{ padding: '10px', whiteSpace: 'nowrap' }}>
+                <Link to={`/detalle/${s.id}`} style={{ background: '#64ffda', color: '#0a192f', padding: '6px 12px', borderRadius: '4px', textDecoration: 'none', fontWeight: 'bold', whiteSpace: 'nowrap', display: 'inline-block' }}>
+                  Ver Detalle
+                </Link>
+              </td>
+            </tr>
+          ))}
+          {lista.length === 0 && (
+            <tr><td colSpan={4} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>No hay servicios para este tema.</td></tr>
+          )}
+        </tbody>
+      </table>
+    </Layout>
+  );
+};
 
 /* ══════════════════════════════════════════════
    PÁGINA: DETALLE SERVICIO
@@ -179,10 +216,10 @@ const DetalleServicio = () => {
         <div>
           <h3 style={{ color: '#0a192f' }}>{s.precio}</h3>
           <p>{s.desc}</p>
-          <img src="https://picsum.photos/seed/det1/200/130" alt="detalle" style={{ borderRadius: '8px', marginTop: '10px' }} />
+          <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200&h=130&fit=crop&q=80" alt="detalle" style={{ borderRadius: '8px', marginTop: '10px' }} />
         </div>
       </div>
-      <img src="https://picsum.photos/seed/det2/400/150" alt="banner" style={{ width: '100%', borderRadius: '8px', marginTop: '20px' }} />
+      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=150&fit=crop&q=80" alt="banner" style={{ width: '100%', borderRadius: '8px', marginTop: '20px' }} />
 
       <h3 style={{ marginTop: '20px' }}>Servicios Alternativos</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -250,7 +287,7 @@ const Contacto = () => {
         <div style={{ flex: 1, minWidth: '280px' }}>
           {enviado ? (
             <div style={{ background: '#d4edda', color: '#155724', padding: '20px', borderRadius: '8px', fontSize: '18px' }}>
-              ✅ ¡Mensaje enviado con éxito! Nos contactaremos pronto.
+              ¡Mensaje enviado con éxito! Nos contactaremos pronto.
             </div>
           ) : (
             <div>
@@ -275,19 +312,19 @@ const Contacto = () => {
                 disabled={hayErrores}
                 style={{ marginTop: '10px', background: hayErrores ? '#ccc' : '#0a192f', color: hayErrores ? '#666' : '#64ffda', border: 'none', padding: '12px 24px', borderRadius: '6px', cursor: hayErrores ? 'not-allowed' : 'pointer', fontSize: '16px', fontWeight: 'bold', width: '100%' }}
               >
-                {hayErrores ? '⚠️ Completá el formulario' : '✉️ Enviar Mensaje'}
+                {hayErrores ? 'Completá el formulario' : 'Enviar Mensaje'}
               </button>
             </div>
           )}
 
           <div style={{ marginTop: '25px', background: '#f5f5f5', padding: '15px', borderRadius: '8px' }}>
             <h3>Información de Contacto</h3>
-            <p>📍 Av. Colón 1234, Córdoba, Argentina</p>
-            <p>📞 +54 351 123-4567</p>
-            <p>✉️ <a href="mailto:contacto@securenet.com" style={{ color: '#0a192f', fontWeight: 'bold' }}>contacto@securenet.com</a></p>
+            <p>Av. Colón 1234, Córdoba, Argentina</p>
+            <p>+54 351 123-4567</p>
+            <p><a href="mailto:contacto@securenet.com" style={{ color: '#0a192f', fontWeight: 'bold' }}>contacto@securenet.com</a></p>
             <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
-              <img src="https://picsum.photos/seed/cont1/120/90" alt="Oficina" style={{ borderRadius: '6px' }} />
-              <img src="https://picsum.photos/seed/cont2/120/90" alt="Equipo"  style={{ borderRadius: '6px' }} />
+              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=120&h=90&fit=crop&q=80" alt="Oficina" style={{ borderRadius: '6px' }} />
+              <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=120&h=90&fit=crop&q=80" alt="Equipo"  style={{ borderRadius: '6px' }} />
             </div>
           </div>
         </div>
